@@ -1,22 +1,38 @@
 'use strict';
 
 var React = require('react/addons');
-var ReactTransitionGroup = React.addons.TransitionGroup;
+//var ReactTransitionGroup = React.addons.TransitionGroup;
 
 // CSS
 require('normalize.css');
-require('../styles/main.css');
+require('../styles/main.scss');
 
-var imageURL = require('../images/yeoman.png');
+var imageData = require('../data/imageData.json');
+
+imageData = (function (data) {
+    var i, len;
+
+    for (i = 0, len = data.length; i < len; i++) {
+        var singleImageData = data[i];
+        singleImageData.imageUrl = require('../images/' + singleImageData.fileName);
+
+        data[i] = singleImageData;
+    }
+
+    return data;
+}(imageData));
 
 var GalleryByReactApp = React.createClass({
   render: function() {
     return (
-      <div className="main">
-        <ReactTransitionGroup transitionName="fade">
-          <img src={imageURL} />
-        </ReactTransitionGroup>
-      </div>
+        <section className="stage">
+            <section className="img-sec">
+
+            </section>
+            <nav className="controller-nav">
+
+            </nav>
+        </section>
     );
   }
 });
