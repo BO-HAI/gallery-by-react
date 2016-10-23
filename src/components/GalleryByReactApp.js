@@ -22,19 +22,41 @@ imageData = (function (data) {
     return data;
 }(imageData));
 
+var ImgFigure = React.createClass({
+    render: function () {
+        return (
+            <figure className="img-figure">
+                <img src={this.props.data.imageUrl} alt={this.props.data.title}/>
+                <figcaption>
+                    <h2 className="img-title">
+                        {this.props.data.title}
+                    </h2>
+                </figcaption>
+            </figure>
+        )
+    }
+});
+
 var GalleryByReactApp = React.createClass({
-  render: function() {
-    return (
-        <section className="stage">
-            <section className="img-sec">
+    render: function() {
+        var controllerUnits = [],
+            imgFigures = [];
 
+        imageData.forEach(function (value) {
+            imgFigures.push(<ImgFigure data={value}/>);
+        });
+
+        return (
+            <section className="stage">
+                <section className="img-sec">
+                    {imgFigures}
+                </section>
+                <nav className="controller-nav">
+                    {controllerUnits}
+                </nav>
             </section>
-            <nav className="controller-nav">
-
-            </nav>
-        </section>
-    );
-  }
+        );
+    }
 });
 React.render(<GalleryByReactApp />, document.getElementById('content')); // jshint ignore:line
 

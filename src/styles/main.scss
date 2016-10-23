@@ -20,12 +20,41 @@ html, body {
 
 .img-sec {
     position: relative;
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
     background-color: #dddddd;
+
+    @at-root {
+        img {
+            width: 240px;
+            height: 240px;
+            display: block;
+        }
+
+        .img-figure {
+            width: 320px;
+            height: 360px;
+            margin: 0;
+            padding: 40px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        figcaption {
+            text-align: center;
+
+            .img-title {
+                color: #a7a9a2;
+                font-size: 16px;
+                height: 40px;
+                line-height: 40px;
+                margin: 0;
+                margin-top: 20px;
+            }
+        }
+    }
+
 }
 
 
