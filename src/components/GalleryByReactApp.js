@@ -39,8 +39,21 @@ function get30DegRandom() {
 }
 
 var ImgFigure = React.createClass({
+    /**
+     * 图片点击处理函数
+     */
+    handleClick: function(e) {
+
+        this.props.inverse();
+        e.stopPropagation();
+        e.preventDefault();
+
+    },
+
     render: function () {
-        var styleObj = {};
+        var styleObj = {},
+            imgFigureClassName;
+
         // 如果props属性中指定了这张图片的位置，则使用
         if (this.props.arrange.pos) {
             styleObj = this.props.arrange.pos;
@@ -53,13 +66,21 @@ var ImgFigure = React.createClass({
             }.bind(this));
         }
 
+        imgFigureClassName = 'img-figure';
+        imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+
         return (
-            <figure className="img-figure" style={styleObj}>
+            <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
                 <img src={this.props.data.imageUrl} alt={this.props.data.title}/>
                 <figcaption>
                     <h2 className="img-title">
                         {this.props.data.title}
                     </h2>
+                    <div className="img-back" onClick={this.handleClick}>
+                        <p>
+                            {this.props.data.desc}
+                        </p>
+                    </div>
                 </figcaption>
             </figure>
         );
@@ -85,6 +106,23 @@ var GalleryByReactApp = React.createClass({
             x: [0, 0],
             topY: [0, 0]
         }
+    },
+
+    /**
+     * 翻转图片
+     * @param index 输入当前被执行inverse操作的图片信息数组的index值
+     * @returns {Function} 这是一个闭包函数，内部返回一个真正待执行的函数
+     */
+    inverse: function(index) {
+
+        return function () {
+            var imgsArrangeArr = this.state.imgsArrangeArr;
+            imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+
+            this.setState({
+                imgsArrangeArr: imgsArrangeArr
+            });
+        }.bind(this);
     },
 
     /**
@@ -168,7 +206,8 @@ var GalleryByReactApp = React.createClass({
                         left: 0,
                         top: 0
                     },
-                    rotate: 0
+                    rotate: 0,
+                    isInverse: false // 图片正反面
                 }
             ]
         };
@@ -226,10 +265,18 @@ var GalleryByReactApp = React.createClass({
                         left: 0,
                         top: 0
                     },
-                    rotate: 0
+                    rotate: 0,
+                    isInverse: false
                 };
             }
-            imgFigures.push(<ImgFigure data={value} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]}/>);
+            imgFigures.push(
+                <ImgFigure
+                    data={value}
+                    ref={'imgFigure' + index}
+                    inverse={this.inverse(index)}
+                    arrange={this.state.imgsArrangeArr[index]}
+                />
+            );
         }.bind(this));
 
         return (
